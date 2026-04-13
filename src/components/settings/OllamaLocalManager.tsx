@@ -103,6 +103,20 @@ const RECOMMENDED_MODELS: OllamaCatalogItem[] = [
     size: "约 3.2GB",
     tags: ["通用", "Gemma 4"],
   },
+  {
+    name: "qwen3.5:0.8b",
+    title: "Qwen 3.5 0.8B",
+    description: "极轻量的 Qwen 3.5 版本，适合低配设备快速推理。",
+    size: "约 0.5GB",
+    tags: ["轻量", "Qwen"],
+  },
+  {
+    name: "qwen3.5:2b",
+    title: "Qwen 3.5 2B",
+    description: "小参数量的 Qwen 3.5 版本，兼顾速度与效果。",
+    size: "约 1.5GB",
+    tags: ["轻量", "Qwen"],
+  },
 ];
 
 function formatBytes(bytes?: number | null): string {
