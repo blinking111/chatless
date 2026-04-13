@@ -17,6 +17,9 @@ pub mod mcp;
 #[path = "web_search/mod.rs"]
 pub mod web_search;
 
+#[path = "ollama.rs"]
+pub mod ollama;
+
 #[tauri::command]
 fn exit(app: tauri::AppHandle, code: i32) {
   #[cfg(not(any(target_os = "android", target_os = "ios")))]
@@ -190,6 +193,8 @@ pub fn run() {
         .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepOne)
         .build(),
     )
+    .manage(ollama::OllamaPullState::default())
+    .manage(ollama::OllamaInstallState::default())
     .manage(onnx_logic::OnnxState {
       session: Default::default(),
       attention_mask: Default::default(),
@@ -206,6 +211,15 @@ pub fn run() {
       check_npx_availability,
       get_environment_health,
       can_run_mcp_services,
+      ollama::get_ollama_system_status,
+      ollama::get_ollama_install_status,
+      ollama::install_ollama,
+      ollama::start_ollama_service,
+      ollama::list_ollama_models,
+      ollama::pull_ollama_model,
+      ollama::delete_ollama_model,
+      ollama::cancel_ollama_pull,
+      ollama::list_ollama_pull_progress,
       // —— MCP Commands ——
       mcp::commands::mcp_connect,
       mcp::commands::mcp_disconnect,

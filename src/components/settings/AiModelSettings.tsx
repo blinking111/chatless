@@ -32,6 +32,7 @@ import { useProviderManagement, ProviderWithStatus } from '@/hooks/useProviderMa
 import { cn } from "@/lib/utils"; // Assuming cn is used somewhere or will be
 import { AddProvidersDialog } from './AddProvidersDialog';
 import { useStableProviderIcon } from "./useStableProviderIcon";
+import { OllamaLocalManager } from './OllamaLocalManager';
 // 头部过滤器已内化到表头，无需 Select 组件
 // duplicate import removed
 
@@ -301,7 +302,9 @@ export function AiModelSettings() {
 
   // --- 渲染逻辑 ---
   return (
-    <div className="h-full min-h-0 flex flex-col gap-3">
+    <div className="space-y-3">
+      <OllamaLocalManager />
+
       {/* 顶部标题栏：紧凑设计 */}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">管理提供商</h2>
@@ -323,7 +326,7 @@ export function AiModelSettings() {
       </div>
 
       {/* 主体：左侧列表 + 右侧详情 */}
-      <div className="grid grid-cols-[240px_minmax(0,1fr)] gap-3 flex-1 min-h-0 overflow-hidden">
+      <div className="grid grid-cols-[240px_minmax(0,1fr)] gap-3 h-[min(68vh,760px)] min-h-[560px]">
         {/* 左侧 Provider 列表 */}
         <div className="flex flex-col bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80 rounded-lg overflow-hidden shadow-sm">
           {/* 搜索栏 */}

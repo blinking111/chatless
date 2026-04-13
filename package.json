@@ -29,7 +29,9 @@
     "version:set": "node scripts/set-version.mjs",
     "tag:repush": "node scripts/repushtag.mjs",
     "release": "pnpm typecheck && node scripts/release.mjs",
-    "export:model-rules": "node scripts/export-model-fetch-rules.mjs"
+    "export:model-rules": "node scripts/export-model-fetch-rules.mjs",
+    "build:windows:local": "powershell -ExecutionPolicy Bypass -File scripts/build-windows-local.ps1",
+    "build:windows:cross:mac": "bash ./scripts/build-windows-cross-macos.sh"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.0.8",
