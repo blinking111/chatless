@@ -72,9 +72,10 @@ export function ProviderModelList(props: ProviderModelListProps) {
   };
 
   // Provider 特性
-  const isOllama = (provider.name || '').toLowerCase().includes('ollama');
-  // 批量策略入口（Ollama 不支持策略设置）
-  const isMultiStrategyProvider = !isOllama;
+  const providerId = (provider.name || '').toLowerCase();
+  const isManagedLocalProvider = providerId.includes('ollama') || providerId.includes('mlc-llm');
+  // 批量策略入口（本地运行时 Provider 不支持策略设置）
+  const isMultiStrategyProvider = !isManagedLocalProvider;
 
   // —— 批量策略设置（轻量） ——
   const [batchMode, setBatchMode] = React.useState(false);
@@ -192,8 +193,8 @@ export function ProviderModelList(props: ProviderModelListProps) {
       showStrategyBadge={batchMode && isMultiStrategyProvider}
       strategy={strategyMap[model.name] || null}
       onStrategyChange={(s: string | null)=>setStrategyMap(prev => ({ ...prev, [model.name]: s }))}
-      allowStrategyActions={!isOllama}
-      allowDelete={!isOllama}
+      allowStrategyActions={!isManagedLocalProvider}
+      allowDelete={!isManagedLocalProvider}
       onRename={async (modelName, nextLabelRaw) => {
         const nextLabel = (nextLabelRaw || '').trim();
         if (!nextLabel) { toast.error('名称不可为空'); return; }
@@ -369,7 +370,7 @@ export function ProviderModelList(props: ProviderModelListProps) {
               {batchMode? '退出' : '批量'}
             </Button>
           )}
-          {!batchMode && !isOllama && (
+          {!batchMode && !isManagedLocalProvider && (
             <ProviderAddModelDialog providerName={provider.name} onAdded={() => setModelSearch('')} />
           )}
           {isMultiStrategyProvider && batchMode && (
@@ -564,4 +565,3 @@ export function ProviderModelList(props: ProviderModelListProps) {
     </div>
   );
 }
-

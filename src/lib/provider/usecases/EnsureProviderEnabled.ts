@@ -17,7 +17,7 @@ export class EnsureProviderEnabledUseCase {
     if (!existing) {
       const def = AVAILABLE_PROVIDERS_CATALOG.find(d => d.name === name);
       const url = def?.defaultUrl || "";
-      const requiresKey = def?.requiresKey ?? (name !== 'Ollama');
+      const requiresKey = def?.requiresKey ?? !['Ollama', 'MLC-LLM'].includes(name);
       const entity: ProviderEntity = {
         name,
         displayName: name,
@@ -48,5 +48,4 @@ export class EnsureProviderEnabledUseCase {
 }
 
 export const ensureProviderEnabledUseCase = new EnsureProviderEnabledUseCase();
-
 

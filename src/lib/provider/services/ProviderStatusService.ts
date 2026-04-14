@@ -33,7 +33,7 @@ export class ProviderStatusService {
 
     // 若未配置服务地址（且不是内置有默认地址的 Provider），直接判定为不可用
     const lacksUrl = !target.url || !String(target.url).trim();
-    if (lacksUrl && name !== 'Ollama') {
+    if (lacksUrl && !['Ollama', 'MLC-LLM'].includes(name)) {
       const now = Date.now();
       const updated: ProviderEntity = { ...target, status: ProviderStatus.NOT_CONNECTED, lastChecked: now, lastReason: 'UNKNOWN', lastMessage: '未配置服务地址' } as any;
       await providerRepository.update(updated);

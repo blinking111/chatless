@@ -8,6 +8,7 @@ import { getStaticModels } from "../staticModels";
 // 默认在全新安装时展示在 Provider 列表中的内置提供商
 const DEFAULT_VISIBLE_PROVIDER_NAMES = new Set<string>([
   'LM Studio',
+  'MLC-LLM',
   'Ollama',
   'DeepSeek',
   'Google AI',
@@ -24,7 +25,7 @@ export class ProviderInitializationService {
     // 从catalog中获取正确的requiresKey值
     const { AVAILABLE_PROVIDERS_CATALOG } = await import("../catalog");
     const catalogDef = AVAILABLE_PROVIDERS_CATALOG.find(def => def.name === p.name);
-    const requiresKey = catalogDef ? catalogDef.requiresKey : p.name !== "Ollama"; // 兜底逻辑
+    const requiresKey = catalogDef ? catalogDef.requiresKey : !['Ollama', 'MLC-LLM'].includes(p.name);
 
     // 优化：若已有持久化 apiKey 则不访问 KeyManager
     const apiKey = existingConfig?.apiKey ?? (requiresKey ? await KeyManager.getProviderKey(p.name) : null);
@@ -66,6 +67,26 @@ export class ProviderInitializationService {
     const staticList = getStaticModels(providerName);
     if (!staticList?.length) return;
     const existing = (await modelRepository.get(providerName)) || [];
+
+    // MLC-LLM 只保留当前已内置权重的模型，避免设置页显示无法直接使用的历史项。
+    if (providerName === 'MLC-LLM') {
+      const authoritative = staticList.map((s) => ({
+        provider: providerName,
+        name: s.id,
+        label: s.label,
+        aliases: [s.id],
+      }));
+      const same =
+        existing.length === authoritative.length &&
+        existing.every((m: any, idx: number) =>
+          m.name === authoritative[idx].name && (m.label || m.name) === authoritative[idx].label
+        );
+      if (!same) {
+        await modelRepository.save(providerName, authoritative as any);
+      }
+      return;
+    }
+
     // 若静态模型均已存在，则不写入，避免无意义的IO
     const existingNames = new Set(existing.map((m: any) => m.name));
     const hasMissing = staticList.some((s) => !existingNames.has(s.id));
@@ -153,5 +174,3 @@ export class ProviderInitializationService {
 }
 
 export const providerInitializationService = new ProviderInitializationService();
-
-

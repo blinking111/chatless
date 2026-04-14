@@ -5,6 +5,7 @@ export type CatalogStrategy =
   | 'anthropic'            // Claude
   | 'gemini'               // Google AI
   | 'deepseek'             // DeepSeek
+  | 'mlc-llm'              // 应用内 MLC/WebLLM
   | 'ollama'               // Ollama（本地部署）
   | 'multi';               // 多策略委派（例如 New API：按模型选择具体协议）
 
@@ -22,6 +23,7 @@ export interface CatalogProviderDef {
 export const AVAILABLE_PROVIDERS_CATALOG: CatalogProviderDef[] = [
   // —— 本地 / 免密优先 ——
   { id: 'lmstudio', name: 'LM Studio', strategy: 'openai-compatible', requiresKey: false, defaultUrl: 'http://localhost:1234/v1' },
+  { id: 'mlc-llm', name: 'MLC-LLM', strategy: 'mlc-llm', requiresKey: false, defaultUrl: '' },
   { id: 'ollama', name: 'Ollama', strategy: 'ollama', requiresKey: false, defaultUrl: 'http://localhost:11434' },
 
   // —— 主流官方云 ——
@@ -142,5 +144,4 @@ export const AVAILABLE_PROVIDERS_CATALOG: CatalogProviderDef[] = [
   { id: 'gptgod', name: 'GPT-GOD', strategy: 'openai-compatible', requiresKey: true, defaultUrl: 'https://api.gptgod.online/v1' },
   { id: 'ph8', name: 'PH8', strategy: 'openai-compatible', requiresKey: true, defaultUrl: 'https://ph8.co' },
 ];
-
 

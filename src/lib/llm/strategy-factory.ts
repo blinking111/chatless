@@ -5,6 +5,7 @@ import { AnthropicProvider } from './providers/AnthropicProvider';
 import { GoogleAIProvider } from './providers/GoogleAIProvider';
 import { DeepSeekProvider } from './providers/DeepSeekProvider';
 import { OllamaProvider } from './providers/OllamaProvider';
+import { MLCLLMProvider } from './providers/MLCLLMProvider';
 import { OpenAIResponsesProvider } from './providers/OpenAIResponsesProvider';
 import type { CatalogProviderDef } from '@/lib/provider/catalog';
 
@@ -103,6 +104,8 @@ export function createProviderInstance(def: CatalogProviderDef, url: string, api
       { const inst = new GoogleAIProvider(baseUrl || def.defaultUrl || 'https://generativelanguage.googleapis.com/v1beta', apiKey || undefined); (inst as any).requiresKey = !!def.requiresKey; return inst; }
     case 'deepseek':
       { const inst = new DeepSeekProvider(baseUrl || def.defaultUrl || 'https://api.deepseek.com', apiKey || undefined); (inst as any).requiresKey = !!def.requiresKey; return inst; }
+    case 'mlc-llm':
+      return new MLCLLMProvider();
     case 'ollama':
       return new OllamaProvider(baseUrl || 'http://localhost:11434');
     case 'multi':
@@ -111,5 +114,4 @@ export function createProviderInstance(def: CatalogProviderDef, url: string, api
       { const inst = new OpenAICompatibleProvider(baseUrl || def.defaultUrl || 'https://api.openai.com/v1', apiKey || undefined); (inst as any).requiresKey = !!def.requiresKey; return inst; }
   }
 }
-
 

@@ -55,116 +55,125 @@ export function ProviderConnectionSection(props: ProviderConnectionSectionProps)
   } = props;
 
   const [showAdvancedDialog, setShowAdvancedDialog] = useState(false);
+  const isMLCProvider = provider.name === 'MLC-LLM';
 
   return (
     <div className="space-y-2.5">
-       <div className="group flex items-center gap-2">
-         <label className="text-xs font-medium text-slate-600 dark:text-slate-400 w-20 flex-shrink-0">
-           服务地址
-         </label>
-         <div className="flex-1 flex items-center gap-1.5">
-           <div className="flex-1 relative">
-             <input
-               value={localUrl}
-               onChange={(e) => { setLocalUrl(e.target.value); }}
-               onBlur={() => {
-                 const repoName = provider.aliases?.[0] || provider.name;
-                 onUrlChange(repoName, localUrl);
-               }}
-               placeholder={provider.name.toLowerCase()==='ollama' ? 'http://localhost:11434' : '服务地址'}
-               className="w-full h-8 px-2.5 bg-white dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/70 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500/40 focus:border-blue-400/50 transition-colors hover:border-slate-300 dark:hover:border-slate-600 dark:text-slate-200 text-xs placeholder:text-slate-400 dark:placeholder:text-slate-500"
-             />
-           </div>
-           {/* 地址预览按钮 - Tooltip形式 */}
-           {endpointPreview && (
-             <TooltipProvider>
-               <Tooltip>
-                 <TooltipTrigger asChild>
-                   <button
-                     type="button"
-                     className="h-7 w-7 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded transition-colors"
-                     title="查看地址预览"
-                   >
-                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                       <path d="M12 5C7 5 2.73 8.11 1 12.5 2.73 16.89 7 20 12 20s9.27-3.11 11-7.5C21.27 8.11 17 5 12 5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
-                     </svg>
-                   </button>
-                 </TooltipTrigger>
-                 <TooltipContent side="bottom" align="end" className="max-w-md">
-                   <p className="text-xs break-all">{endpointPreview}</p>
-                 </TooltipContent>
-               </Tooltip>
-             </TooltipProvider>
-           )}
-           {props.showInlineMenu !== false && (
-          <TooltipProvider>
-            <DropdownMenu>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DropdownMenuTrigger asChild>
+      {!isMLCProvider ? (
+        <div className="group flex items-center gap-2">
+          <label className="text-xs font-medium text-slate-600 dark:text-slate-400 w-20 flex-shrink-0">
+            服务地址
+          </label>
+          <div className="flex-1 flex items-center gap-1.5">
+            <div className="flex-1 relative">
+              <input
+                value={localUrl}
+                onChange={(e) => { setLocalUrl(e.target.value); }}
+                onBlur={() => {
+                  const repoName = provider.aliases?.[0] || provider.name;
+                  onUrlChange(repoName, localUrl);
+                }}
+                placeholder={provider.name.toLowerCase()==='ollama' ? 'http://localhost:11434' : '服务地址'}
+                className="w-full h-8 px-2.5 bg-white dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/70 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500/40 focus:border-blue-400/50 transition-colors hover:border-slate-300 dark:hover:border-slate-600 dark:text-slate-200 text-xs placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              />
+            </div>
+            {endpointPreview && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
                     <button
                       type="button"
-                      className={`relative p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded focus:outline-none transition-colors ${
-                        provider.preferences?.useBrowserRequest ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''
-                      }`}
+                      className="h-7 w-7 flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded transition-colors"
+                      title="查看地址预览"
                     >
-                      <MoreVertical className="w-3.5 h-3.5" />
-                      {provider.preferences?.useBrowserRequest && (
-                        <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-blue-500 rounded-full border border-white dark:border-slate-800"></div>
-                      )}
+                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5C7 5 2.73 8.11 1 12.5C2.73 16.89 7 20 12 20C17 20 21.27 16.89 23 12.5C21.27 8.11 17 5 12 5ZM12 17.5C9.24 17.5 7 15.26 7 12.5C7 9.74 9.24 7.5 12 7.5C14.76 7.5 17 9.74 17 12.5C17 15.26 14.76 17.5 12 17.5ZM12 9.5C10.34 9.5 9 10.84 9 12.5C9 14.16 10.34 15.5 12 15.5C13.66 15.5 15 14.16 15 12.5C15 10.84 13.66 9.5 12 9.5Z" fill="currentColor"/>
+                      </svg>
                     </button>
-                  </DropdownMenuTrigger>
-                </TooltipTrigger>
-                <TooltipContent side="top" className="text-[10px]">
-                  高级设置
-                  {provider.preferences?.useBrowserRequest && <div className="text-blue-400">（已启用浏览器模式）</div>}
-                </TooltipContent>
-              </Tooltip>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel className="flex items-center gap-1.5 text-xs font-semibold">
-                  <Settings className="w-3.5 h-3.5 text-blue-600" />
-                  提供商设置
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                
-                <DropdownMenuItem 
-                  onClick={onResetUrl} 
-                  className="flex items-center gap-2 px-2 py-2 text-xs"
-                >
-                  <div className="flex items-center justify-center w-7 h-7 bg-slate-100 dark:bg-slate-700 rounded">
-                    <Undo2 className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-medium">重置地址</span>
-                    <span className="text-[10px] text-slate-500">恢复默认配置</span>
-                  </div>
-                </DropdownMenuItem>
-                
-                <DropdownMenuSeparator />
-                
-                <DropdownMenuItem 
-                  onClick={() => setShowAdvancedDialog(true)} 
-                  className="flex items-center gap-2 px-2 py-2 text-xs"
-                >
-                  <div className="flex items-center justify-center w-7 h-7 bg-blue-100 dark:bg-blue-900/50 rounded">
-                    <Sliders className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-medium">高级选项</span>
-                      {provider.preferences?.useBrowserRequest && (
-                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
-                      )}
-                    </div>
-                    <span className="text-[10px] text-slate-500">请求方式等</span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </TooltipProvider>
-          )}
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" align="end" className="max-w-md">
+                    <p className="text-xs break-all">{endpointPreview}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+            {props.showInlineMenu !== false && (
+              <TooltipProvider>
+                <DropdownMenu>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <DropdownMenuTrigger asChild>
+                        <button
+                          type="button"
+                          className={`relative p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50 rounded focus:outline-none transition-colors ${
+                            provider.preferences?.useBrowserRequest ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : ''
+                          }`}
+                        >
+                          <MoreVertical className="w-3.5 h-3.5" />
+                          {provider.preferences?.useBrowserRequest && (
+                            <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-blue-500 rounded-full border border-white dark:border-slate-800"></div>
+                          )}
+                        </button>
+                      </DropdownMenuTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="text-[10px]">
+                      高级设置
+                      {provider.preferences?.useBrowserRequest && <div className="text-blue-400">（已启用浏览器模式）</div>}
+                    </TooltipContent>
+                  </Tooltip>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel className="flex items-center gap-1.5 text-xs font-semibold">
+                      <Settings className="w-3.5 h-3.5 text-blue-600" />
+                      提供商设置
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem
+                      onClick={onResetUrl}
+                      className="flex items-center gap-2 px-2 py-2 text-xs"
+                    >
+                      <div className="flex items-center justify-center w-7 h-7 bg-slate-100 dark:bg-slate-700 rounded">
+                        <Undo2 className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-medium">重置地址</span>
+                        <span className="text-[10px] text-slate-500">恢复默认配置</span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem
+                      onClick={() => setShowAdvancedDialog(true)}
+                      className="flex items-center gap-2 px-2 py-2 text-xs"
+                    >
+                      <div className="flex items-center justify-center w-7 h-7 bg-blue-100 dark:bg-blue-900/50 rounded">
+                        <Sliders className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-medium">高级选项</span>
+                          {provider.preferences?.useBrowserRequest && (
+                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-slate-500">请求方式等</span>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TooltipProvider>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="rounded-md border border-slate-200/70 dark:border-slate-700/70 bg-slate-50/70 dark:bg-slate-900/40 px-3 py-2">
+          <div className="text-xs font-medium text-slate-700 dark:text-slate-200">应用内本地推理</div>
+          <div className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+            无需服务地址和 API Key。优先加载随应用分发的 MLC 模型资源，缺失时回退到官方预置模型缓存。
+          </div>
+        </div>
+      )}
 
       {showApiKeyFields && (
         <div className="flex items-center gap-1.5">
@@ -219,4 +228,3 @@ export function ProviderConnectionSection(props: ProviderConnectionSectionProps)
     </div>
   );
 }
-

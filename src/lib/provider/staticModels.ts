@@ -539,6 +539,12 @@ export const STATIC_PROVIDER_MODELS = [
     models: []
   },
   {
+    providerName: "MLC-LLM",
+    models: [
+      { id: "Qwen2.5-0.5B-Instruct-q4f16_1-MLC", label: "Qwen2.5 0.5B Instruct" }
+    ]
+  },
+  {
     providerName: "Ollama",
     models: []
   },

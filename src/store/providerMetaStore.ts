@@ -49,7 +49,7 @@ function buildQuickList(): QuickProviderMeta[] {
     // 从catalog中获取正确的requiresKey值
     const { AVAILABLE_PROVIDERS_CATALOG } = require('@/lib/provider/catalog');
     const catalogDef = AVAILABLE_PROVIDERS_CATALOG.find((def: any) => def.name === p.name);
-    const requiresKey = catalogDef ? catalogDef.requiresKey : p.name !== 'Ollama'; // 兜底逻辑
+    const requiresKey = catalogDef ? catalogDef.requiresKey : !['Ollama', 'MLC-LLM'].includes(p.name);
     
     // 统一从 png 起步，减少首个 404；后续由 UI 的门面根据命中/缺失映射自动切换
     const icon = `${PROVIDER_ICON_BASE(slug)}.png`;

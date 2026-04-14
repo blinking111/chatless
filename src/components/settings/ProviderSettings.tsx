@@ -137,6 +137,8 @@ function ProviderSettingsImpl({
         return 'https://generativelanguage.googleapis.com/v1beta';
       case 'deepseek':
         return 'https://api.deepseek.com';
+      case 'mlc-llm':
+        return '';
       default:
         return '';
     }
@@ -269,7 +271,7 @@ function ProviderSettingsImpl({
   const showApiKeyFields = provider.requiresApiKey !== false;
 
   // 是否允许用户新增模型（除 Ollama） - 保留以便后续使用
-  const _canAddModels = provider.name !== 'Ollama';
+  const _canAddModels = !['Ollama', 'MLC-LLM'].includes(provider.name);
 
   // —— 模型策略选择（仅对 multi 策略类 provider 有意义，如 New API） ——
   // 注意：New API作为聚合型提供商，用户应该为每个模型单独设置策略
